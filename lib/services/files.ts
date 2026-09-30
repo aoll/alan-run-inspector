@@ -13,3 +13,11 @@ export async function readOwnedFile(key: string): Promise<Buffer> {
   if (!data) throw new NotFoundError("File");
   return data;
 }
+
+const CONTENT_TYPES: Record<string, string> = { json: "application/json", pdf: "application/pdf" };
+
+// The type follows the stored file's extension; anything unknown is an opaque download.
+export function contentTypeFor(key: string): string {
+  const extension = key.split("/").pop()?.split(".").pop()?.toLowerCase() ?? "";
+  return Object.hasOwn(CONTENT_TYPES, extension) ? CONTENT_TYPES[extension]! : "application/octet-stream";
+}

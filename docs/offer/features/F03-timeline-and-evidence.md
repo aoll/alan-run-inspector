@@ -12,7 +12,7 @@ Vague : 2
 - `/runs/[id]` shows, for the owner, the run header (title, status) and its steps ordered by position; each step shows its kind, title and collapsible input, output and evidence.
 - A step is "Unverified" exactly when it is a claim with no evidence: service test over every step kind, with and without evidence.
 - While the run is `queued` or `running` the page refreshes every 2 seconds and steps appear without a manual reload; the refresh stops when the run is `done` or `failed` (Playwright).
-- The owner sees a "Download archive" link when `archiveUrl` exists; the file is valid JSON containing the steps; another user asking for that file gets "not found".
+- The owner sees a "Download archive" link when `archiveUrl` exists; the file is valid JSON (`application/json`) containing the steps as reviewed; another user asking for that file gets "not found".
 - Another user's run and an unknown id both answer "not found"; an anonymous visitor is redirected to sign-in.
 - Each step card renders an actions area (`StepActions`) that F04 and F05 fill; without them it is empty.
 - All text exists in `en` and `fr` (parity test already in the template).

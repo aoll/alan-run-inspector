@@ -2,6 +2,7 @@ import "server-only";
 import { decideStep as saveDecision, getStepNote, setVerdict } from "@/lib/dal/run-decisions";
 import { listSteps } from "@/lib/dal/run-steps";
 import { getRun } from "@/lib/dal/runs";
+import { refreshArchive } from "@/lib/services/archive";
 import { NotFoundError } from "@/lib/errors";
 import type { DecideStepInput } from "@/lib/schemas/review";
 
@@ -31,6 +32,8 @@ export async function decideStep(input: Omit<DecideStepInput, "note"> & { note?:
   if (!saved) throw new NotFoundError("Step");
   const verdict = computeVerdict(await listSteps(input.runId));
   await setVerdict(input.runId, verdict);
+  // The decision is saved: a failed archive rewrite must not turn it into an error for the reader.
+  await refreshArchive(input.runId).catch((error: unknown) => console.error("[review] archive refresh failed", error));
   return verdict;
 }
 

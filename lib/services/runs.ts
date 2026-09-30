@@ -6,7 +6,7 @@ import { env } from "@/lib/env";
 import { RateLimitedError } from "@/lib/errors";
 import type { StartRunInput } from "@/lib/schemas/runs";
 import { enqueue } from "@/lib/queue";
-import { putFile } from "@/lib/storage";
+import { storeArchive } from "@/lib/services/archive";
 
 export type { RunDto } from "@/lib/dal/runs";
 
@@ -56,13 +56,10 @@ export async function processRun(
       await sleep(delayMs);
       await runJobsDal.writeRunStep(job.id, step);
     }
+    // Done first, so that the archive describes the finished run (status, finishedAt).
+    await runJobsDal.completeRunJob(job.id);
     const archive = await runJobsDal.getRunArchive(job.id);
-    const { url } = await putFile({
-      key: `runs/${job.userId}/${job.id}.json`,
-      data: Buffer.from(JSON.stringify(archive, null, 2)),
-      contentType: "application/json",
-    });
-    await runJobsDal.completeRunJob(job.id, url);
+    if (archive) await runJobsDal.setRunArchiveUrl(job.id, await storeArchive(job.userId, archive));
   } catch (error) {
     console.error("[runs] job failed", job.id, error);
     await runJobsDal.failRunJob(job.id);

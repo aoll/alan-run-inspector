@@ -41,8 +41,13 @@ describe("run consumer (real database)", () => {
     const stored = putFile.mock.calls[0]?.[0] as { key: string; data: Buffer; contentType: string };
     expect(stored.key).toBe(`runs/${user.id}/${run.id}.json`);
     expect(stored.contentType).toBe("application/json");
-    const archive = JSON.parse(stored.data.toString()) as { run: { id: string }; steps: unknown[] };
+    const archive = JSON.parse(stored.data.toString()) as {
+      run: { id: string; status: string; finishedAt: string | null };
+      steps: unknown[];
+    };
     expect(archive.run.id).toBe(run.id);
+    expect(archive.run.status).toBe("done");
+    expect(archive.run.finishedAt).not.toBeNull();
     expect(archive.steps).toHaveLength(8);
   });
 

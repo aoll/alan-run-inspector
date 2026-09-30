@@ -5,10 +5,12 @@ import { NotFoundError, RateLimitedError, UnauthorizedError } from "@/lib/errors
 
 const getRun = vi.fn();
 const listSteps = vi.fn();
-const countRecentRuns = vi.fn();
+const recordAndCount = vi.fn();
 vi.mock("@/lib/dal/runs", () => ({
   getRun: (...args: unknown[]) => getRun(...args),
-  countRecentRuns: (...args: unknown[]) => countRecentRuns(...args),
+}));
+vi.mock("@/lib/dal/rate-events", () => ({
+  recordAndCountRateEvents: (...args: unknown[]) => recordAndCount(...args),
 }));
 vi.mock("@/lib/dal/run-steps", () => ({ listSteps: (...args: unknown[]) => listSteps(...args) }));
 
@@ -23,7 +25,7 @@ describe("explainStep", () => {
     vi.clearAllMocks();
     getRun.mockResolvedValue({ id: "run-1" });
     listSteps.mockResolvedValue([step]);
-    countRecentRuns.mockResolvedValue({ byUser: 0, byIp: 0 });
+    recordAndCount.mockResolvedValue({ byUser: 1, byIp: 1 });
   });
 
   it("streams the recorded explanation of the step kind in the requested locale, storing nothing", async () => {
@@ -38,7 +40,7 @@ describe("explainStep", () => {
     await expect(explainStep(input)).rejects.toBeInstanceOf(NotFoundError);
     getRun.mockResolvedValue({ id: "run-1" });
     await expect(explainStep({ ...input, position: 9 })).rejects.toBeInstanceOf(NotFoundError);
-    expect(countRecentRuns).not.toHaveBeenCalled();
+    expect(recordAndCount).not.toHaveBeenCalled();
   });
 
   it("lets the anonymous refusal of the DAL through", async () => {
@@ -46,12 +48,17 @@ describe("explainStep", () => {
     await expect(explainStep(input)).rejects.toBeInstanceOf(UnauthorizedError);
   });
 
+  it("records the call under its own kind, then accepts N calls in a minute", async () => {
+    recordAndCount.mockResolvedValue({ byUser: 10, byIp: 10 });
+    await expect(explainStep(input)).resolves.toBeDefined();
+    expect(recordAndCount).toHaveBeenCalledWith({ kind: "explain", ipHash: "ip", windowSeconds: 60 });
+  });
+
   it("refuses the (N+1)th call within a minute, by user or by IP hash", async () => {
-    countRecentRuns.mockResolvedValue({ byUser: 10, byIp: 0 });
+    recordAndCount.mockResolvedValue({ byUser: 11, byIp: 1 });
     await expect(explainStep(input)).rejects.toBeInstanceOf(RateLimitedError);
-    countRecentRuns.mockResolvedValue({ byUser: 0, byIp: 10 });
+    recordAndCount.mockResolvedValue({ byUser: 1, byIp: 11 });
     await expect(explainStep(input)).rejects.toBeInstanceOf(RateLimitedError);
-    expect(countRecentRuns).toHaveBeenCalledWith({ ipHash: "ip", windowSeconds: 60 });
   });
 });
 
