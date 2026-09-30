@@ -2,10 +2,36 @@
   "integration": "integration/alan-run-inspector",
   "flow": "light",
   "features": {
-    "F01-demo-access": { "dependsOn": [], "status": "ready", "worktree": null },
-    "F02-runs-and-execution": { "dependsOn": [], "status": "ready", "worktree": null },
-    "F03-timeline-and-evidence": { "dependsOn": ["F02-runs-and-execution"], "status": "pending", "worktree": null },
-    "F04-review-and-verdict": { "dependsOn": ["F03-timeline-and-evidence"], "status": "pending", "worktree": null },
-    "F05-explain-step": { "dependsOn": ["F03-timeline-and-evidence"], "status": "pending", "worktree": null }
+    "F01-demo-access": {
+      "dependsOn": [],
+      "status": "dispatched",
+      "worktree": "f01-demo-access"
+    },
+    "F02-runs-and-execution": {
+      "dependsOn": [],
+      "status": "dispatched",
+      "worktree": "f02-runs-and-execution"
+    },
+    "F03-timeline-and-evidence": {
+      "dependsOn": [
+        "F02-runs-and-execution"
+      ],
+      "status": "pending",
+      "worktree": null
+    },
+    "F04-review-and-verdict": {
+      "dependsOn": [
+        "F03-timeline-and-evidence"
+      ],
+      "status": "pending",
+      "worktree": null
+    },
+    "F05-explain-step": {
+      "dependsOn": [
+        "F03-timeline-and-evidence"
+      ],
+      "status": "pending",
+      "worktree": null
+    }
   }
 }
