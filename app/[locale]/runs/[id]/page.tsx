@@ -8,6 +8,7 @@ import { getRunTimeline } from "@/lib/services/timeline";
 import { getCurrentViewer } from "@/lib/services/session";
 import { AutoRefresh } from "./_components/auto-refresh";
 import { Timeline } from "./_components/timeline";
+import { VerdictBadge } from "./_components/verdict-badge";
 
 export default async function RunPage({ params }: PageProps<"/[locale]/runs/[id]">) {
   const { id } = await params;
@@ -32,6 +33,7 @@ export default async function RunPage({ params }: PageProps<"/[locale]/runs/[id]
         <h1 className="text-2xl font-semibold">{run.title}</h1>
         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
           <Badge variant={run.status === "failed" ? "destructive" : "secondary"}>{tRuns(`status.${run.status}`)}</Badge>
+          <VerdictBadge verdict={run.verdict} />
           <span>
             {t("started", { date: format.dateTime(run.createdAt, { dateStyle: "medium", timeStyle: "short" }) })}
           </span>

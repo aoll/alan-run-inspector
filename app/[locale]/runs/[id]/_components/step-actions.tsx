@@ -1,7 +1,7 @@
 import type { TimelineStep } from "@/lib/services/timeline";
+import { StepReview } from "./step-review";
 
-// Extension slot rendered in every step card. Empty on purpose: the review (decision, note) and the explain
-// button are added here by their own features, each through its own file.
-export function StepActions(_props: { runId: string; step: TimelineStep }) {
-  return null;
+// Extension slot rendered in every step card: each feature adds its own component here (review, explain).
+export function StepActions({ runId, step }: { runId: string; step: TimelineStep }) {
+  return <StepReview runId={runId} step={step} />;
 }

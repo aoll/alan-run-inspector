@@ -1,0 +1,17 @@
+{
+  "decision": "Decision",
+  "decisions": { "pending": "Pending", "approved": "Approved", "rejected": "Rejected" },
+  "note": "Private note",
+  "notePlaceholder": "Why is this step rejected? Only you can see this.",
+  "noteHint": "Optional, {max} characters at most. Kept with a rejection.",
+  "approve": "Approve",
+  "reject": "Reject",
+  "verdict": { "none": "No verdict yet", "accepted": "Accepted", "needs_changes": "Needs changes" },
+  "errors": {
+    "invalid": "This decision is not valid (the note is limited to 500 characters).",
+    "unauthorized": "Sign in to review this run.",
+    "notFound": "This step could not be found.",
+    "notDone": "Steps can be reviewed once the run is done.",
+    "failed": "The decision could not be saved. Try again."
+  }
+}
