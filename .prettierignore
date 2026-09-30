@@ -4,3 +4,4 @@ hooks/use-mobile.ts
 drizzle/
 messages/
 pnpm-lock.yaml
+.claude/runs/
