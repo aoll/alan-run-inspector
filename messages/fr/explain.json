@@ -1,0 +1,7 @@
+{
+  "button": "Expliquer cette étape",
+  "generating": "Génération...",
+  "label": "Généré, non vérifié",
+  "rateLimited": "Trop de requêtes. Réessayez dans une minute.",
+  "failed": "L'explication n'a pas pu être générée."
+}

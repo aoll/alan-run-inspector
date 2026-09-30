@@ -1,0 +1,76 @@
+{
+  "en": {
+    "read": {
+      "text": "The agent opened a file to understand the code before changing anything. Check that the file is really the one the task is about.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 24
+      }
+    },
+    "tool_call": {
+      "text": "The agent ran a tool with the input shown. Compare the output with what the input asked for, and look for anything ignored.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 23
+      }
+    },
+    "test": {
+      "text": "The agent ran the tests. A pass only matters if the tests cover the change: check which ones ran and which were skipped.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 23
+      }
+    },
+    "source": {
+      "text": "The agent consulted a source to back up its work. Confirm the source exists and says what the agent relies on.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 21
+      }
+    },
+    "claim": {
+      "text": "The agent states a conclusion. Look for evidence behind it: a claim without evidence should be checked by hand before you approve it.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 23
+      }
+    }
+  },
+  "fr": {
+    "read": {
+      "text": "L'agent a ouvert un fichier pour comprendre le code avant de modifier quoi que ce soit. Vérifiez que ce fichier est bien celui que la tâche concerne.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 27
+      }
+    },
+    "tool_call": {
+      "text": "L'agent a lancé un outil avec l'entrée affichée. Comparez la sortie avec ce que l'entrée demandait, et cherchez ce qui a été ignoré.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 23
+      }
+    },
+    "test": {
+      "text": "L'agent a lancé les tests. Un succès n'a de valeur que si les tests couvrent le changement : vérifiez lesquels ont tourné et lesquels ont été ignorés.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 27
+      }
+    },
+    "source": {
+      "text": "L'agent a consulté une source pour appuyer son travail. Confirmez que la source existe et dit bien ce sur quoi l'agent s'appuie.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 22
+      }
+    },
+    "claim": {
+      "text": "L'agent énonce une conclusion. Cherchez la preuve qui la soutient : une affirmation sans preuve doit être vérifiée à la main avant d'être approuvée.",
+      "usage": {
+        "inputTokens": 120,
+        "outputTokens": 24
+      }
+    }
+  }
+}
