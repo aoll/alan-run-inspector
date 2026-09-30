@@ -26,6 +26,9 @@ export const auth = betterAuth({
       role: { type: "string", input: false, defaultValue: "user" },
     },
   },
+  // Better Auth's own limits (3 sign-ups / sign-ins per 10 s per IP) are active under `next start`, so parallel E2E runs
+  // from one IP would be refused. Like BotID, they are enforced on a real Vercel deployment only.
+  rateLimit: { enabled: env.VERCEL === "1" },
   emailAndPassword: { enabled: true },
   plugins: [
     magicLink({ sendMagicLink }),
