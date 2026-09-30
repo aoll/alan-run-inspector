@@ -1,12 +1,13 @@
 // Seeds a demo account so a fresh database can be explored right away.
 // Usage: pnpm db:seed   (idempotent: does nothing when the account already exists)
 import * as nextEnvNs from "@next/env";
+import { DEMO_EMAIL, DEMO_NAME, DEMO_PASSWORD } from "../lib/auth-demo";
 
 const { loadEnvConfig } = (nextEnvNs as { default?: typeof nextEnvNs }).default ?? nextEnvNs;
 loadEnvConfig(process.cwd());
 
-const EMAIL = "demo@example.com";
-const PASSWORD = "demo-password-123";
+const EMAIL = DEMO_EMAIL;
+const PASSWORD = DEMO_PASSWORD;
 
 async function main() {
   // Imported after loadEnvConfig: lib/env validates process.env when first imported.
@@ -18,7 +19,7 @@ async function main() {
   const [existing] = await db.select({ id: users.id }).from(users).where(eq(users.email, EMAIL));
   if (existing) return console.log("Seed: demo account already exists");
 
-  await auth.api.signUpEmail({ body: { name: "Demo User", email: EMAIL, password: PASSWORD } });
+  await auth.api.signUpEmail({ body: { name: DEMO_NAME, email: EMAIL, password: PASSWORD } });
   console.log(`Seed: created ${EMAIL} / ${PASSWORD}`);
 }
 
