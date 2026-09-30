@@ -1,0 +1,4 @@
+{
+  "title": "Welcome, {name}",
+  "hint": "Add your business pages under app/[locale]/, following entry → service → DAL."
+}

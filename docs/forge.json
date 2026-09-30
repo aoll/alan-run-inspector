@@ -1,0 +1,13 @@
+{
+  "name": "alan-run-inspector",
+  "offer": "alan-fullstack-agentic-ai",
+  "flow": "light",
+  "exportedAt": "2026-09-30T14:05:08.383Z",
+  "hub": {
+    "path": "/home/user/career-hub",
+    "commit": "f729b455b8c62500457b68589082ea514afa61f4",
+    "dirty": false
+  },
+  "template": "apps/demo-template",
+  "patterns": "apps/demo-template/PATTERNS.md"
+}

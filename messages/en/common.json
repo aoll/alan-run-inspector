@@ -1,0 +1,34 @@
+{
+  "appName": "Demo Template",
+  "nav": {
+    "home": "Home",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signOut": "Sign out",
+    "app": "Dashboard"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Language",
+    "fr": "Français",
+    "en": "English"
+  },
+  "actions": {
+    "create": "Create",
+    "delete": "Delete",
+    "open": "Open",
+    "back": "Back"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "unauthorized": "Please sign in first.",
+    "rateLimited": "Too many requests. Try again in a minute.",
+    "bot": "Request blocked by the bot protection.",
+    "notFound": "Not found."
+  }
+}

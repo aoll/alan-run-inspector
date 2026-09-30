@@ -1,0 +1,34 @@
+{
+  "appName": "Demo Template",
+  "nav": {
+    "home": "Accueil",
+    "signIn": "Connexion",
+    "signUp": "Inscription",
+    "signOut": "Déconnexion",
+    "app": "Tableau de bord"
+  },
+  "theme": {
+    "toggle": "Changer de thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "locale": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "English"
+  },
+  "actions": {
+    "create": "Créer",
+    "delete": "Supprimer",
+    "open": "Ouvrir",
+    "back": "Retour"
+  },
+  "errors": {
+    "generic": "Une erreur est survenue. Réessayez.",
+    "unauthorized": "Connectez-vous d'abord.",
+    "rateLimited": "Trop de requêtes. Réessayez dans une minute.",
+    "bot": "Requête bloquée par la protection anti-bots.",
+    "notFound": "Introuvable."
+  }
+}

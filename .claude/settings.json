@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "QUEUE_SLOTS_TEST": "4",
+    "QUEUE_SLOTS_TYPECHECK": "4",
+    "QUEUE_SLOTS_E2E": "1",
+    "WORKTREE_MAX": "4",
+    "E2E_PORT": "3100"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.mjs\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

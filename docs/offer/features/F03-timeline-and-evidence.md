@@ -1,0 +1,34 @@
+# F03 · Timeline and evidence
+
+Ref spec : `spec.md` › Journeys 1.3-1.4 and 1.7, Data rule "unverified", Pages (`/runs/[id]`, `GET /api/files/...`)
+Patterns : `protected-page`, `private-dal-ownership`, `service-business-rules`, `queue-job`, `file-storage`, `i18n-zone`
+Briques : database, files, i18n, UI
+Dépend de : F02
+Estimation : 15 minutes
+Vague : 2
+
+## Acceptation
+
+- `/runs/[id]` shows, for the owner, the run header (title, status) and its steps ordered by position; each step shows its kind, title and collapsible input, output and evidence.
+- A step is "Unverified" exactly when it is a claim with no evidence: service test over every step kind, with and without evidence.
+- While the run is `queued` or `running` the page refreshes every 2 seconds and steps appear without a manual reload; the refresh stops when the run is `done` or `failed` (Playwright).
+- The owner sees a "Download archive" link when `archiveUrl` exists; the file is valid JSON containing the steps; another user asking for that file gets "not found".
+- Another user's run and an unknown id both answer "not found"; an anonymous visitor is redirected to sign-in.
+- Each step card renders an actions area (`StepActions`) that F04 and F05 fill; without them it is empty.
+- All text exists in `en` and `fr` (parity test already in the template).
+- Playwright: start the scenario `fix-invoice-test`, see the steps appear, see exactly one "Unverified" step.
+
+## Périmètre
+
+Files this feature may create or modify:
+
+- `app/[locale]/runs/[id]/page.tsx`, `app/[locale]/runs/[id]/loading.tsx`
+- `app/[locale]/runs/[id]/_components/` (`timeline.tsx`, `step-card.tsx`, `step-actions.tsx` as an empty slot, `auto-refresh.tsx`)
+- `lib/services/timeline.ts` (`isUnverified`, `getRunTimeline`), its tests
+- `lib/dal/run-steps.ts` (`listSteps`, read only; it reuses `getRun` from F02's `lib/dal/runs.ts`), its tests
+- `messages/{en,fr}/timeline.json`, `i18n/zones.ts` (one line: `timeline`)
+- `e2e/f03-timeline.spec.ts`
+
+## Hors périmètre
+
+Decisions and verdict (F04), the explain button (F05), editing steps, sharing.

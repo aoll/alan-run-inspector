@@ -1,0 +1,6 @@
+.next/
+components/ui/
+hooks/use-mobile.ts
+drizzle/
+messages/
+pnpm-lock.yaml
