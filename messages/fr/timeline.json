@@ -1,0 +1,20 @@
+{
+  "back": "Toutes les exécutions",
+  "notice": "Fictif : l'agent rejoue un scénario enregistré.",
+  "started": "Lancée le {date}",
+  "downloadArchive": "Télécharger l'archive",
+  "empty": "Aucune étape pour l'instant. Les étapes apparaissent au fil du travail de l'agent.",
+  "steps": "Étapes",
+  "kind": {
+    "read": "Lecture",
+    "tool_call": "Appel d'outil",
+    "test": "Test",
+    "source": "Source",
+    "claim": "Affirmation"
+  },
+  "unverified": "Non vérifié",
+  "input": "Entrée",
+  "output": "Sortie",
+  "evidence": "Preuve",
+  "noEvidence": "Aucune preuve fournie."
+}

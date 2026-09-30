@@ -1,0 +1,20 @@
+{
+  "back": "All runs",
+  "notice": "Fictional: the agent replays a recorded scenario.",
+  "started": "Started {date}",
+  "downloadArchive": "Download archive",
+  "empty": "No step yet. Steps appear as the agent works.",
+  "steps": "Steps",
+  "kind": {
+    "read": "Read",
+    "tool_call": "Tool call",
+    "test": "Test",
+    "source": "Source",
+    "claim": "Claim"
+  },
+  "unverified": "Unverified",
+  "input": "Input",
+  "output": "Output",
+  "evidence": "Evidence",
+  "noEvidence": "No evidence provided."
+}
