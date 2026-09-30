@@ -17,6 +17,8 @@ export const createAppEnv = (source: Record<string, string | undefined>) =>
       // Vercel sets it to "1" at build time and at runtime; absent elsewhere. lib/security.ts reads it
       // to tell a real Vercel deployment (BotID enforced) from local or self-hosted runs.
       VERCEL: z.string().optional(),
+      // Pre-fills the sign-in form with the seeded demo account (lib/auth-demo.ts). Off unless "true".
+      DEMO_PREFILL: z.stringbool().default(false),
       QA_BYPASS_SECRET: z.string().optional(),
       NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     },

@@ -1,5 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { demoCredentials } from "@/lib/auth-demo";
+import { env } from "@/lib/env";
 import { SignInForm } from "../_components";
 
 export default async function SignInPage() {
@@ -11,7 +13,7 @@ export default async function SignInPage() {
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
-        <SignInForm />
+        <SignInForm defaults={demoCredentials(env)} />
       </CardContent>
     </Card>
   );

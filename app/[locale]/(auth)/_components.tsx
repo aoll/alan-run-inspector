@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Link, useRouter } from "@/i18n/navigation";
 import { APP_HOME } from "@/lib/app-config";
 import { authClient } from "@/lib/auth-client";
+import type { DemoCredentials } from "@/lib/auth-demo";
 import { signInSchema, signUpSchema } from "@/lib/schemas/auth";
 import { requestMagicLinkAction, type MagicLinkState } from "./_actions";
 
@@ -37,7 +38,7 @@ function useCredentialsForm(mode: "signIn" | "signUp") {
   return { submit, error, pending };
 }
 
-export function SignInForm() {
+export function SignInForm({ defaults }: { defaults: DemoCredentials | null }) {
   const t = useTranslations("auth");
   const { submit, error, pending } = useCredentialsForm("signIn");
   const [magic, magicAction, magicPending] = useActionState(requestMagicLinkAction, IDLE);
@@ -47,11 +48,18 @@ export function SignInForm() {
       <form action={submit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">{t("fields.email")}</Label>
-          <Input id="email" name="email" type="email" autoComplete="email" required />
+          <Input id="email" name="email" type="email" autoComplete="email" defaultValue={defaults?.email} required />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">{t("fields.password")}</Label>
-          <Input id="password" name="password" type="password" autoComplete="current-password" required />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            defaultValue={defaults?.password}
+            required
+          />
         </div>
         {error ? (
           <Alert variant="destructive">
