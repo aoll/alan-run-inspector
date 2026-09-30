@@ -83,6 +83,10 @@ test("pages have a translated title and the app has an icon", async ({ page }) =
   await expect(page).toHaveTitle("Run Inspector");
   await page.goto(en("/sign-in"));
   await expect(page).toHaveTitle("Sign in · Run Inspector");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+  await page.goto(en("/sign-up"));
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+  await page.goto(en("/sign-in"));
   await page.goto(fr("/sign-in"));
   await expect(page).toHaveTitle("Connexion · Run Inspector");
   const icon = await page.locator('link[rel="icon"]').first().getAttribute("href");
@@ -107,6 +111,8 @@ test("the landing page is a minimal entry point to the tool", async ({ page }) =
 });
 
 test("an unknown URL shows the translated not-found page, with the header, in every locale", async ({ page }) => {
+  const consoleErrors: string[] = [];
+  page.on("console", (message) => message.type() === "error" && consoleErrors.push(message.text()));
   for (const [path, heading, back] of [
     [en("/nope/zzz"), "Page not found", "Back to the runs"],
     [en("/nope"), "Page not found", "Back to the runs"],
@@ -115,11 +121,15 @@ test("an unknown URL shows the translated not-found page, with the header, in ev
   ] as const) {
     const response = await page.goto(path);
     expect(response?.status()).toBe(404);
+    await expect(page).toHaveTitle(`${heading} · Run Inspector`);
     await expect(page.getByRole("heading", { name: heading })).toBeVisible();
     await expect(page.getByRole("link", { name: back })).toBeVisible();
     await expect(page.getByRole("link", { name: "Run Inspector" })).toBeVisible();
     await expect(page.getByText("This page could not be found")).toHaveCount(0);
   }
+  // A production build: the dev-only "Could not validate `instant`" noise must not appear, and nothing else either.
+  // (The browser's own "Failed to load resource: 404" for the document is not a console error of the page.)
+  expect(consoleErrors.filter((text) => !text.includes("Failed to load resource"))).toEqual([]);
   // Without any locale in the URL the default locale is used (no hand-written locale here either).
   await page.goto("/nope/zzz");
   await expect(page.locator("html")).toHaveAttribute("lang", /^(en|fr)$/);

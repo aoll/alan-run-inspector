@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { APP_HOME } from "@/lib/app-config";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("common.errors");
+  return { title: t("notFoundTitle") };
+}
 
 // Rendered inside the localized layout, so the text and the header follow the visitor's locale. The same page
 // answers an unknown id, an invalid id and another user's run: nothing tells them apart.

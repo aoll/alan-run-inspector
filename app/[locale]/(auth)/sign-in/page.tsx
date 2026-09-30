@@ -15,7 +15,9 @@ export default async function SignInPage() {
   return (
     <Card className="mx-auto max-w-md">
       <CardHeader>
-        <CardTitle>{t("title")}</CardTitle>
+        <CardTitle role="heading" aria-level={1}>
+          {t("title")}
+        </CardTitle>
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
