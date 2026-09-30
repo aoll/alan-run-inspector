@@ -11,5 +11,7 @@ initBotId({
     ...routing.locales.map((locale) => ({ path: localizedPath("/sign-in", locale), method: "POST" })),
     // startRunAction posts to the runs page of each locale.
     ...routing.locales.map((locale) => ({ path: localizedPath("/runs", locale), method: "POST" })),
+    // The explain route is called by fetch from the client.
+    { path: "/api/explain", method: "POST" },
   ],
 });

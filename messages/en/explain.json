@@ -1,0 +1,7 @@
+{
+  "button": "Explain this step",
+  "generating": "Generating...",
+  "label": "Generated, not verified",
+  "rateLimited": "Too many requests. Try again in a minute.",
+  "failed": "The explanation could not be generated."
+}
