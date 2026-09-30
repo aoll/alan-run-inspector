@@ -13,7 +13,7 @@ import { UnauthorizedError } from "@/lib/errors";
 //
 // SYSTEM_DAL lists the modules whose callers have no user session by design (the queue consumer, the
 // sign-in flow). Adding a module here is an explicit, reviewed decision.
-const SYSTEM_DAL = new Set(["export-jobs", "magic-link", "session"]);
+const SYSTEM_DAL = new Set(["export-jobs", "magic-link", "run-jobs", "session"]);
 
 const modules = import.meta.glob("./*.ts", { eager: true }) as Record<string, Record<string, unknown>>;
 

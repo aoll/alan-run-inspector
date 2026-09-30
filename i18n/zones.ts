@@ -6,5 +6,6 @@ export const ZONES = [
   "common",
   "landing",
   "auth",
+  "runs",
 ] as const;
 export type Zone = (typeof ZONES)[number];

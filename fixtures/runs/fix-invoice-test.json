@@ -1,0 +1,165 @@
+{
+  "title": {
+    "en": "Fix the failing invoice test",
+    "fr": "Corriger le test de facture en échec"
+  },
+  "steps": [
+    {
+      "kind": "read",
+      "delayMs": 500,
+      "title": {
+        "en": "Read the failing test",
+        "fr": "Lecture du test en échec"
+      },
+      "input": {
+        "en": "tests/invoice.test.ts",
+        "fr": "tests/invoice.test.ts"
+      },
+      "output": {
+        "en": "The test expects a total of 120.00 but receives 119.99.",
+        "fr": "Le test attend un total de 120,00 mais reçoit 119,99."
+      },
+      "evidence": {
+        "en": "tests/invoice.test.ts, line 42",
+        "fr": "tests/invoice.test.ts, ligne 42"
+      }
+    },
+    {
+      "kind": "read",
+      "delayMs": 600,
+      "title": {
+        "en": "Read the invoice module",
+        "fr": "Lecture du module de facture"
+      },
+      "input": {
+        "en": "src/invoice.ts",
+        "fr": "src/invoice.ts"
+      },
+      "output": {
+        "en": "The total sums line amounts that are rounded one by one.",
+        "fr": "Le total additionne des montants de ligne arrondis un par un."
+      },
+      "evidence": {
+        "en": "src/invoice.ts, lines 18 to 27",
+        "fr": "src/invoice.ts, lignes 18 à 27"
+      }
+    },
+    {
+      "kind": "tool_call",
+      "delayMs": 700,
+      "title": {
+        "en": "Search for other callers",
+        "fr": "Recherche des autres appelants"
+      },
+      "input": {
+        "en": "grep -rn \"computeTotal\" src/",
+        "fr": "grep -rn \"computeTotal\" src/"
+      },
+      "output": {
+        "en": "Two matches: src/invoice.ts and src/checkout.ts.",
+        "fr": "Deux résultats : src/invoice.ts et src/checkout.ts."
+      },
+      "evidence": {
+        "en": "Command output, 2 matches",
+        "fr": "Sortie de la commande, 2 résultats"
+      }
+    },
+    {
+      "kind": "source",
+      "delayMs": 500,
+      "title": {
+        "en": "Check the rounding rule",
+        "fr": "Vérification de la règle d'arrondi"
+      },
+      "input": {
+        "en": "docs/billing-rules.md",
+        "fr": "docs/billing-rules.md"
+      },
+      "output": {
+        "en": "Totals are rounded once, after the sum of the lines.",
+        "fr": "Les totaux sont arrondis une seule fois, après la somme des lignes."
+      },
+      "evidence": {
+        "en": "docs/billing-rules.md, section Rounding",
+        "fr": "docs/billing-rules.md, section Arrondis"
+      }
+    },
+    {
+      "kind": "tool_call",
+      "delayMs": 800,
+      "title": {
+        "en": "Round the total once",
+        "fr": "Arrondir le total une seule fois"
+      },
+      "input": {
+        "en": "Edit src/invoice.ts: sum first, round last",
+        "fr": "Modification de src/invoice.ts : sommer d'abord, arrondir ensuite"
+      },
+      "output": {
+        "en": "computeTotal now rounds after the sum.",
+        "fr": "computeTotal arrondit désormais après la somme."
+      },
+      "evidence": {
+        "en": "Diff of src/invoice.ts, 3 lines changed",
+        "fr": "Diff de src/invoice.ts, 3 lignes modifiées"
+      }
+    },
+    {
+      "kind": "test",
+      "delayMs": 900,
+      "title": {
+        "en": "Run the invoice tests",
+        "fr": "Exécution des tests de facture"
+      },
+      "input": {
+        "en": "pnpm vitest run tests/invoice.test.ts",
+        "fr": "pnpm vitest run tests/invoice.test.ts"
+      },
+      "output": {
+        "en": "6 tests passed, 0 failed.",
+        "fr": "6 tests réussis, 0 en échec."
+      },
+      "evidence": {
+        "en": "Test runner output, 6 passed",
+        "fr": "Sortie du lanceur de tests, 6 réussis"
+      }
+    },
+    {
+      "kind": "claim",
+      "delayMs": 700,
+      "title": {
+        "en": "No other caller is affected",
+        "fr": "Aucun autre appelant n'est affecté"
+      },
+      "input": {
+        "en": "Question: does the change alter src/checkout.ts?",
+        "fr": "Question : la modification touche-t-elle src/checkout.ts ?"
+      },
+      "output": {
+        "en": "No other caller is affected by the change.",
+        "fr": "Aucun autre appelant n'est affecté par la modification."
+      },
+      "evidence": null
+    },
+    {
+      "kind": "tool_call",
+      "delayMs": 600,
+      "title": {
+        "en": "Prepare the change summary",
+        "fr": "Préparation du résumé de la modification"
+      },
+      "input": {
+        "en": "git diff --stat",
+        "fr": "git diff --stat"
+      },
+      "output": {
+        "en": "1 file changed, 3 insertions, 3 deletions.",
+        "fr": "1 fichier modifié, 3 insertions, 3 suppressions."
+      },
+      "evidence": {
+        "en": "Command output of git diff --stat",
+        "fr": "Sortie de la commande git diff --stat"
+      }
+    }
+  ]
+}
