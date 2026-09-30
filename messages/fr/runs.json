@@ -1,0 +1,27 @@
+{
+  "start": {
+    "title": "Lancer une exécution",
+    "notice": "Fictif : l'agent rejoue un scénario enregistré. Aucun vrai modèle ni dépôt n'est utilisé.",
+    "scenario": "Scénario",
+    "submit": "Lancer l'exécution"
+  },
+  "scenarios": {
+    "fix-invoice-test": "Corriger le test de facture en échec",
+    "rename-config-option": "Renommer une option de configuration"
+  },
+  "list": {
+    "title": "Vos exécutions",
+    "empty": "Aucune exécution pour l'instant. Lancez la première."
+  },
+  "status": {
+    "queued": "En attente",
+    "running": "En cours",
+    "done": "Terminée",
+    "failed": "Échouée"
+  },
+  "errors": {
+    "invalid": "Choisissez un scénario dans la liste.",
+    "rateLimited": "Trop d'exécutions lancées. Réessayez dans une minute.",
+    "failed": "L'exécution n'a pas pu être lancée."
+  }
+}

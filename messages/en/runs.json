@@ -1,0 +1,27 @@
+{
+  "start": {
+    "title": "Start a run",
+    "notice": "Fictional: the agent replays a recorded scenario. No real model or repository is involved.",
+    "scenario": "Scenario",
+    "submit": "Start run"
+  },
+  "scenarios": {
+    "fix-invoice-test": "Fix the failing invoice test",
+    "rename-config-option": "Rename a config option"
+  },
+  "list": {
+    "title": "Your runs",
+    "empty": "No run yet. Start the first one."
+  },
+  "status": {
+    "queued": "Queued",
+    "running": "Running",
+    "done": "Done",
+    "failed": "Failed"
+  },
+  "errors": {
+    "invalid": "Choose a scenario from the list.",
+    "rateLimited": "Too many runs started. Try again in a minute.",
+    "failed": "The run could not be started."
+  }
+}
