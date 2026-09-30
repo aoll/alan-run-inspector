@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,6 +7,12 @@ import { Link, redirect } from "@/i18n/navigation";
 import { listRuns } from "@/lib/services/runs";
 import { getCurrentViewer } from "@/lib/services/session";
 import { AutoRefresh, StartRunForm } from "./_components/start-run-form";
+import { runTitle } from "./run-title";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("runs");
+  return { title: t("pageTitle") };
+}
 
 export default async function RunsPage() {
   const locale = await getLocale();
@@ -32,7 +39,7 @@ export default async function RunsPage() {
           <Link key={run.id} href={`/runs/${run.id}`} className="block">
             <Card className="transition-colors hover:bg-accent">
               <CardHeader>
-                <CardTitle>{run.title}</CardTitle>
+                <CardTitle>{runTitle(t, run)}</CardTitle>
                 <CardDescription>
                   {format.dateTime(run.createdAt, { dateStyle: "medium", timeStyle: "short" })}
                 </CardDescription>

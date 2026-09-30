@@ -14,7 +14,7 @@ Vague : 1
 - Redelivery is harmless: delivering the same message twice leaves exactly the same steps (unique on run and position) and the run `done`.
 - A message delivered more than 5 times marks the run `failed` instead of retrying forever.
 - Once the run is `done`, the consumer stores a JSON archive of the finished run and its steps under `runs/<userId>/<runId>.json` and records `archiveUrl`; each review decision (F04) rewrites it (verdict, decisions, private notes); it never contains `ipHash` or `userId`.
-- Two scenarios exist, `fix-invoice-test` (contains one claim without evidence) and `rename-config-option` (every step has evidence), with titles and texts in `en` and `fr`; an unknown scenario in the form is rejected by Zod.
+- Two scenarios exist, `fix-invoice-test` (contains one claim without evidence) and `rename-config-option` (every step has evidence), with titles and texts in `en` and `fr`; an unknown scenario in the form is rejected by Zod. A run's title is shown translated from its `scenario` in the current locale (`runs.scenarios.<scenario>`, falling back to the stored title); step texts stay as recorded at creation.
 - Rate limit: the (N+1)th start within one minute, for the same user or the same IP hash, is refused with a translated message and nothing is created; the bot guard protects the start action (the BotID path list includes the page it posts to).
 - DAL: another user cannot see a run (`getRun` returns null, the list excludes it); the run DTO has no `ipHash`; `run-jobs` is registered as a system DAL in `lib/dal/architecture.test.ts`.
 - An anonymous visitor cannot start a run.

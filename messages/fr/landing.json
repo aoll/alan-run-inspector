@@ -1,6 +1,5 @@
 {
-  "title": "Votre demo commence ici",
-  "subtitle": "Auth, base de données, IA, fichiers, files d'attente, sécurité et i18n sont branchés. Ajoutez les pages métier.",
-  "cta": "Ouvrir l'application",
-  "ctaSignUp": "Créer un compte"
+  "title": "Vérifiez ce qu'un agent IA a vraiment fait",
+  "subtitle": "Run Inspector rejoue les étapes d'un agent, signale chaque affirmation sans preuve et vous laisse approuver ou rejeter chaque étape. Toutes les données sont fictives.",
+  "cta": "Ouvrir l'outil"
 }

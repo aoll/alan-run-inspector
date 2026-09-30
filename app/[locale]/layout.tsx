@@ -1,6 +1,8 @@
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
+import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { locale as localeParam } from "next/root-params";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -12,6 +14,12 @@ import "../globals.css";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+// "<page> · Run Inspector": pages give their own title, the app name alone is the default (landing).
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("common");
+  return { title: { template: `%s · ${t("appName")}`, default: t("appName") } };
 }
 
 export default async function RootLayout({ children }: LayoutProps<"/[locale]">) {

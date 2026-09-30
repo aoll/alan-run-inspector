@@ -40,6 +40,9 @@ function useCredentialsForm(mode: "signIn" | "signUp") {
 
 export function SignInForm({ defaults }: { defaults: DemoCredentials | null }) {
   const t = useTranslations("auth");
+  // React resets an uncontrolled form once its action ends: the email is kept in state so a failed attempt
+  // does not empty it (the demo pre-fill seeds it; the password is deliberately left to be retyped).
+  const [email, setEmail] = useState(defaults?.email ?? "");
   const { submit, error, pending } = useCredentialsForm("signIn");
   const [magic, magicAction, magicPending] = useActionState(requestMagicLinkAction, IDLE);
 
@@ -48,7 +51,15 @@ export function SignInForm({ defaults }: { defaults: DemoCredentials | null }) {
       <form action={submit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">{t("fields.email")}</Label>
-          <Input id="email" name="email" type="email" autoComplete="email" defaultValue={defaults?.email} required />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">{t("fields.password")}</Label>

@@ -23,5 +23,6 @@
     "invalid": "Choisissez un scénario dans la liste.",
     "rateLimited": "Trop d'exécutions lancées. Réessayez dans une minute.",
     "failed": "L'exécution n'a pas pu être lancée."
-  }
+  },
+  "pageTitle": "Exécutions"
 }

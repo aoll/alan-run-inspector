@@ -1,5 +1,5 @@
 {
-  "appName": "Demo Template",
+  "appName": "Run Inspector",
   "nav": {
     "home": "Home",
     "signIn": "Sign in",
@@ -29,6 +29,8 @@
     "unauthorized": "Please sign in first.",
     "rateLimited": "Too many requests. Try again in a minute.",
     "bot": "Request blocked by the bot protection.",
-    "notFound": "Not found."
+    "notFound": "Not found.",
+    "notFoundTitle": "Page not found",
+    "notFoundBack": "Back to the runs"
   }
 }

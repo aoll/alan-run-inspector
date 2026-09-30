@@ -51,14 +51,14 @@ test("the timeline fills in by itself and flags exactly one unverified step", as
   // An unknown id answers "not found" too.
   const runUrl = page.url();
   await page.goto(en("/runs/00000000-0000-4000-8000-000000000000"));
-  await expect(page.getByText("This page could not be found")).toBeVisible();
+  await expect(page.getByText("Page not found")).toBeVisible();
 
   // Another user gets "not found" for the run and its archive.
   const other = await page.context().browser()!.newContext();
   const otherPage = await other.newPage();
   await signUp(otherPage, "Other User");
   await otherPage.goto(runUrl);
-  await expect(otherPage.getByText("This page could not be found")).toBeVisible();
+  await expect(otherPage.getByText("Page not found")).toBeVisible();
   expect((await otherPage.request.get(href!)).status()).toBe(404);
   await other.close();
 });

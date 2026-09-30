@@ -9,11 +9,12 @@ Vague : 2
 
 ## Acceptation
 
-- `/runs/[id]` shows, for the owner, the run header (title, status) and its steps ordered by position; each step shows its kind, title and collapsible input, output and evidence.
+- `/runs/[id]` shows, for the owner, the run header (title translated from `scenario` in the current locale, status) and its steps ordered by position; each step shows its kind, title and collapsible input, output and evidence.
 - A step is "Unverified" exactly when it is a claim with no evidence: service test over every step kind, with and without evidence.
 - While the run is `queued` or `running` the page refreshes every 2 seconds and steps appear without a manual reload; the refresh stops when the run is `done` or `failed` (Playwright).
 - The owner sees a "Download archive" link when `archiveUrl` exists; the file is valid JSON (`application/json`) containing the steps as reviewed; another user asking for that file gets "not found".
-- Another user's run and an unknown id both answer "not found"; an anonymous visitor is redirected to sign-in.
+- A `failed` run shows an explicit translated failure message (and that a new run can be started from the list) instead of the empty-timeline text.
+- Another user's run and an unknown id both answer the same translated "not found" page (HTTP status limit: see the note below); an anonymous visitor is redirected to sign-in.
 - Each step card renders an actions area (`StepActions`) that F04 and F05 fill; without them it is empty.
 - All text exists in `en` and `fr` (parity test already in the template).
 - Playwright: start the scenario `fix-invoice-test`, see the steps appear, see exactly one "Unverified" step.
@@ -32,3 +33,5 @@ Files this feature may create or modify:
 ## Hors périmètre
 
 Decisions and verdict (F04), the explain button (F05), editing steps, sharing.
+
+Note: with Cache Components the not-found page streams after `loading.tsx`, so its HTTP status stays 200 (the page carries `noindex`); the app is behind a sign-in, so this is accepted.
