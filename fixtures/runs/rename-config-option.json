@@ -1,0 +1,168 @@
+{
+  "title": {
+    "en": "Rename a config option",
+    "fr": "Renommer une option de configuration"
+  },
+  "steps": [
+    {
+      "kind": "read",
+      "delayMs": 500,
+      "title": {
+        "en": "Read the configuration schema",
+        "fr": "Lecture du schéma de configuration"
+      },
+      "input": {
+        "en": "src/config/schema.ts",
+        "fr": "src/config/schema.ts"
+      },
+      "output": {
+        "en": "The option is named maxRetries.",
+        "fr": "L'option s'appelle maxRetries."
+      },
+      "evidence": {
+        "en": "src/config/schema.ts, line 12",
+        "fr": "src/config/schema.ts, ligne 12"
+      }
+    },
+    {
+      "kind": "tool_call",
+      "delayMs": 700,
+      "title": {
+        "en": "Find every use of the option",
+        "fr": "Recherche de chaque usage de l'option"
+      },
+      "input": {
+        "en": "grep -rn \"maxRetries\" src/ docs/",
+        "fr": "grep -rn \"maxRetries\" src/ docs/"
+      },
+      "output": {
+        "en": "Four matches in three files.",
+        "fr": "Quatre résultats dans trois fichiers."
+      },
+      "evidence": {
+        "en": "Command output, 4 matches",
+        "fr": "Sortie de la commande, 4 résultats"
+      }
+    },
+    {
+      "kind": "source",
+      "delayMs": 500,
+      "title": {
+        "en": "Check the naming convention",
+        "fr": "Vérification de la convention de nommage"
+      },
+      "input": {
+        "en": "docs/conventions.md",
+        "fr": "docs/conventions.md"
+      },
+      "output": {
+        "en": "Options that count attempts are named retryLimit.",
+        "fr": "Les options qui comptent des tentatives s'appellent retryLimit."
+      },
+      "evidence": {
+        "en": "docs/conventions.md, section Naming",
+        "fr": "docs/conventions.md, section Nommage"
+      }
+    },
+    {
+      "kind": "tool_call",
+      "delayMs": 800,
+      "title": {
+        "en": "Rename the option",
+        "fr": "Renommer l'option"
+      },
+      "input": {
+        "en": "Edit 3 files: maxRetries becomes retryLimit",
+        "fr": "Modification de 3 fichiers : maxRetries devient retryLimit"
+      },
+      "output": {
+        "en": "All four usages now use retryLimit.",
+        "fr": "Les quatre usages utilisent désormais retryLimit."
+      },
+      "evidence": {
+        "en": "Diff of 3 files, 4 lines changed",
+        "fr": "Diff de 3 fichiers, 4 lignes modifiées"
+      }
+    },
+    {
+      "kind": "tool_call",
+      "delayMs": 600,
+      "title": {
+        "en": "Keep the old name working",
+        "fr": "Garder l'ancien nom fonctionnel"
+      },
+      "input": {
+        "en": "Edit src/config/load.ts: map maxRetries to retryLimit",
+        "fr": "Modification de src/config/load.ts : maxRetries vers retryLimit"
+      },
+      "output": {
+        "en": "The old name is still read and triggers a warning.",
+        "fr": "L'ancien nom est encore lu et déclenche un avertissement."
+      },
+      "evidence": {
+        "en": "Diff of src/config/load.ts, 6 lines added",
+        "fr": "Diff de src/config/load.ts, 6 lignes ajoutées"
+      }
+    },
+    {
+      "kind": "test",
+      "delayMs": 900,
+      "title": {
+        "en": "Run the configuration tests",
+        "fr": "Exécution des tests de configuration"
+      },
+      "input": {
+        "en": "pnpm vitest run src/config",
+        "fr": "pnpm vitest run src/config"
+      },
+      "output": {
+        "en": "12 tests passed, 0 failed.",
+        "fr": "12 tests réussis, 0 en échec."
+      },
+      "evidence": {
+        "en": "Test runner output, 12 passed",
+        "fr": "Sortie du lanceur de tests, 12 réussis"
+      }
+    },
+    {
+      "kind": "claim",
+      "delayMs": 700,
+      "title": {
+        "en": "Existing configuration files keep working",
+        "fr": "Les fichiers de configuration existants continuent de fonctionner"
+      },
+      "input": {
+        "en": "Question: does a file using maxRetries still load?",
+        "fr": "Question : un fichier qui utilise maxRetries se charge-t-il encore ?"
+      },
+      "output": {
+        "en": "Existing files keep working and log a deprecation warning.",
+        "fr": "Les fichiers existants continuent de fonctionner et journalisent un avertissement d'obsolescence."
+      },
+      "evidence": {
+        "en": "src/config/load.test.ts, test \"reads the legacy name\"",
+        "fr": "src/config/load.test.ts, test « reads the legacy name »"
+      }
+    },
+    {
+      "kind": "read",
+      "delayMs": 500,
+      "title": {
+        "en": "Read the changelog",
+        "fr": "Lecture du journal des modifications"
+      },
+      "input": {
+        "en": "CHANGELOG.md",
+        "fr": "CHANGELOG.md"
+      },
+      "output": {
+        "en": "An entry for the rename is added under Unreleased.",
+        "fr": "Une entrée pour le renommage est ajoutée sous Unreleased."
+      },
+      "evidence": {
+        "en": "CHANGELOG.md, section Unreleased",
+        "fr": "CHANGELOG.md, section Unreleased"
+      }
+    }
+  ]
+}
