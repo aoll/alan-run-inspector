@@ -52,3 +52,17 @@ export const runSteps = pgTable(
   },
   (table) => [unique("run_steps_run_position_unique").on(table.runId, table.position)],
 );
+
+// One event per rate-limited call that has no row of its own (e.g. "explain"), counted by user and by IP hash.
+// Only the event is stored, never its content; the DAL purges events older than an hour on every write.
+export const rateEvents = pgTable(
+  "rate_events",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    kind: text("kind").notNull(),
+    userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
+    ipHash: text("ip_hash").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("rate_events_kind_created_idx").on(table.kind, table.createdAt)],
+);
