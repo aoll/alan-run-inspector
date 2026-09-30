@@ -9,14 +9,14 @@
     },
     "F02-runs-and-execution": {
       "dependsOn": [],
-      "status": "dispatched",
-      "worktree": "f02-runs-and-execution"
+      "status": "merged",
+      "worktree": null
     },
     "F03-timeline-and-evidence": {
       "dependsOn": [
         "F02-runs-and-execution"
       ],
-      "status": "pending",
+      "status": "ready",
       "worktree": null
     },
     "F04-review-and-verdict": {
