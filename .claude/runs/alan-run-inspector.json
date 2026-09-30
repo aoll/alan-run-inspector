@@ -23,14 +23,14 @@
       "dependsOn": [
         "F03-timeline-and-evidence"
       ],
-      "status": "dispatched",
+      "status": "merged",
       "worktree": "f04-review-and-verdict"
     },
     "F05-explain-step": {
       "dependsOn": [
         "F03-timeline-and-evidence"
       ],
-      "status": "dispatched",
+      "status": "merged",
       "worktree": "f05-explain-step"
     }
   }

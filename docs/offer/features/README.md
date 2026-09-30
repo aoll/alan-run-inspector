@@ -7,8 +7,8 @@ Waves group the features that can be built at the same time: features of a wave 
 | F01-demo-access           | —          | 8 min    | 1    | done   |
 | F02-runs-and-execution    | —          | 20 min   | 1    | done   |
 | F03-timeline-and-evidence | F02        | 15 min   | 2    | done   |
-| F04-review-and-verdict    | F03        | 15 min   | 3    | to do  |
-| F05-explain-step (bonus)  | F03        | 10 min   | 3    | to do  |
+| F04-review-and-verdict    | F03        | 15 min   | 3    | done   |
+| F05-explain-step (bonus)  | F03        | 10 min   | 3    | done   |
 
 Core total: 58 min (F01 to F04), within the 60-minute budget. With the bonus: 68 min; F05 is the first cut.
 
