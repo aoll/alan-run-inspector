@@ -1,0 +1,17 @@
+{
+  "decision": "Décision",
+  "decisions": { "pending": "En attente", "approved": "Approuvée", "rejected": "Rejetée" },
+  "note": "Note privée",
+  "notePlaceholder": "Pourquoi cette étape est-elle rejetée ? Vous seul la voyez.",
+  "noteHint": "Facultative, {max} caractères au plus. Conservée avec un rejet.",
+  "approve": "Approuver",
+  "reject": "Rejeter",
+  "verdict": { "none": "Pas encore de verdict", "accepted": "Acceptée", "needs_changes": "Modifications requises" },
+  "errors": {
+    "invalid": "Cette décision n'est pas valide (la note est limitée à 500 caractères).",
+    "unauthorized": "Connectez-vous pour relire cette exécution.",
+    "notFound": "Cette étape est introuvable.",
+    "notDone": "Les étapes se relisent une fois l'exécution terminée.",
+    "failed": "La décision n'a pas pu être enregistrée. Réessayez."
+  }
+}

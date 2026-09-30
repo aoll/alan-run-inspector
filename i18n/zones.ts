@@ -8,6 +8,7 @@ export const ZONES = [
   "auth",
   "runs",
   "timeline",
+  "review",
   "explain",
 ] as const;
 export type Zone = (typeof ZONES)[number];
