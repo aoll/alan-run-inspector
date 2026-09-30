@@ -20,6 +20,7 @@
   "pageTitle": "Run details",
   "failed": {
     "title": "This run failed",
-    "description": "The agent stopped before finishing, so the steps above may be incomplete. You can start a new run from the list of runs."
+    "description": "The agent stopped before finishing, so the steps above may be incomplete. You can start a new run from the list of runs.",
+    "descriptionNoSteps": "The agent stopped before finishing. You can start a new run from the list of runs."
   }
 }

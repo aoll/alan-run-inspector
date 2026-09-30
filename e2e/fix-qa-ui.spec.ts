@@ -54,6 +54,8 @@ test("another user's run shows the translated not-found page with a way back", a
   await otherPage.goto(fr(`/runs/${runId}`));
   await expect(otherPage.getByRole("heading", { name: "Page introuvable" })).toBeVisible();
   await expect(otherPage.getByText("Introuvable.")).toBeVisible();
+  // The tab title is the not-found one, not the run page's.
+  await expect(otherPage).toHaveTitle("Page introuvable · Run Inspector");
   await expect(otherPage.getByText("This page could not be found")).toHaveCount(0);
   await expect(otherPage.getByRole("link", { name: "Retour aux exécutions" })).toHaveAttribute("href", fr("/runs"));
   // The header is localized too, and the run title is not leaked.
@@ -68,6 +70,8 @@ test("a failed run explains the failure and what to do", async ({ page }) => {
   await expect(page.getByText("This run failed")).toBeVisible();
   await expect(page.getByText(/start a new run from the list of runs/)).toBeVisible();
   await expect(page.getByText("No step yet")).toHaveCount(0);
+  // No step: nothing "above" to be incomplete.
+  await expect(page.getByText(/steps above/)).toHaveCount(0);
   await page.goto(fr(`/runs/${runId}`));
   await expect(page.getByText("Cette exécution a échoué")).toBeVisible();
   // The title follows the current locale (scenario), not the language of creation.
@@ -100,4 +104,42 @@ test("the landing page is a minimal entry point to the tool", async ({ page }) =
   await expect(page.getByRole("heading", { name: "Check what an AI agent really did" })).toBeVisible();
   await expect(page.getByText("Demo Template")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Open the tool" })).toHaveAttribute("href", en("/sign-in"));
+});
+
+test("an unknown URL shows the translated not-found page, with the header, in every locale", async ({ page }) => {
+  for (const [path, heading, back] of [
+    [en("/nope/zzz"), "Page not found", "Back to the runs"],
+    [en("/nope"), "Page not found", "Back to the runs"],
+    [fr("/nope"), "Page introuvable", "Retour aux exécutions"],
+    [fr("/nope/zzz/yyy"), "Page introuvable", "Retour aux exécutions"],
+  ] as const) {
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(404);
+    await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+    await expect(page.getByRole("link", { name: back })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Run Inspector" })).toBeVisible();
+    await expect(page.getByText("This page could not be found")).toHaveCount(0);
+  }
+  // Without any locale in the URL the default locale is used (no hand-written locale here either).
+  await page.goto("/nope/zzz");
+  await expect(page.locator("html")).toHaveAttribute("lang", /^(en|fr)$/);
+});
+
+test("a refused sign-up says the email is taken and keeps the fields", async ({ browser }) => {
+  const email = await signUp(await (await browser.newContext()).newPage(), "First Owner");
+  const page = await (await browser.newContext()).newPage();
+  for (const [path, taken] of [
+    [en("/sign-up"), /An account already exists with this email/],
+    [fr("/sign-up"), /Un compte existe déjà avec cet email/],
+  ] as const) {
+    await page.goto(path);
+    await page.getByLabel(/^(Name|Nom)$/).fill("Demo Again");
+    await page.getByLabel("Email").fill(email);
+    await page.getByLabel(/^(Password|Mot de passe)$/).fill("correct-horse-battery");
+    await page.getByRole("button", { name: /^(Create account|Créer)/ }).click();
+    await expect(page.getByText(taken)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/Sign-in failed|Connexion impossible/)).toHaveCount(0);
+    await expect(page.getByLabel(/^(Name|Nom)$/)).toHaveValue("Demo Again");
+    await expect(page.getByLabel("Email")).toHaveValue(email);
+  }
 });

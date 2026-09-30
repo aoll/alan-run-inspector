@@ -17,7 +17,9 @@ export async function Timeline({
     status === "failed" ? (
       <Alert variant="destructive">
         <AlertTitle>{t("failed.title")}</AlertTitle>
-        <AlertDescription>{t("failed.description")}</AlertDescription>
+        <AlertDescription>
+          {t(steps.length === 0 ? "failed.descriptionNoSteps" : "failed.description")}
+        </AlertDescription>
       </Alert>
     ) : null;
   if (steps.length === 0) return failed ?? <p className="text-muted-foreground">{t("empty")}</p>;

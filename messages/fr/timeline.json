@@ -20,6 +20,7 @@
   "pageTitle": "Détail de l'exécution",
   "failed": {
     "title": "Cette exécution a échoué",
-    "description": "L'agent s'est arrêté avant la fin : les étapes ci-dessus peuvent être incomplètes. Vous pouvez lancer une nouvelle exécution depuis la liste des exécutions."
+    "description": "L'agent s'est arrêté avant la fin : les étapes ci-dessus peuvent être incomplètes. Vous pouvez lancer une nouvelle exécution depuis la liste des exécutions.",
+    "descriptionNoSteps": "L'agent s'est arrêté avant la fin. Vous pouvez lancer une nouvelle exécution depuis la liste des exécutions."
   }
 }

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link, redirect } from "@/i18n/navigation";
 import { NotFoundError } from "@/lib/errors";
 import { runIdSchema } from "@/lib/schemas/runs";
+import { archiveKey } from "@/lib/services/archive";
 import { getRunTimeline } from "@/lib/services/timeline";
 import { getCurrentViewer } from "@/lib/services/session";
 import { runTitle } from "../run-title";
@@ -12,15 +13,25 @@ import { AutoRefresh } from "./_components/auto-refresh";
 import { Timeline } from "./_components/timeline";
 import { VerdictBadge } from "./_components/verdict-badge";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("timeline");
-  return { title: t("pageTitle") };
+// The title is the run page's only once the run is known to be readable: an unknown id, an invalid id and another
+// user's run (and the anonymous redirect) all get the not-found title, identical for the three.
+export async function generateMetadata({ params }: PageProps<"/[locale]/runs/[id]">): Promise<Metadata> {
+  const { id } = await params;
+  const [t, tCommon] = await Promise.all([getTranslations("timeline"), getTranslations("common.errors")]);
+  const readable =
+    runIdSchema.safeParse(id).success &&
+    (await getRunTimeline(id).then(
+      () => true,
+      () => false,
+    ));
+  return { title: readable ? t("pageTitle") : tCommon("notFoundTitle") };
 }
 
 export default async function RunPage({ params }: PageProps<"/[locale]/runs/[id]">) {
   const { id } = await params;
   const locale = await getLocale();
-  if (!(await getCurrentViewer())) return redirect({ href: "/sign-in", locale });
+  const viewer = await getCurrentViewer();
+  if (!viewer) return redirect({ href: "/sign-in", locale });
   if (!runIdSchema.safeParse(id).success) notFound();
 
   const { run, steps } = await getRunTimeline(id).catch((error: unknown) => {
@@ -28,6 +39,8 @@ export default async function RunPage({ params }: PageProps<"/[locale]/runs/[id]
     throw error;
   });
   const [t, tRuns, format] = await Promise.all([getTranslations("timeline"), getTranslations("runs"), getFormatter()]);
+  // The download is rebuilt from the database by the files route, so a finished run always has its link.
+  const archiveHref = run.status === "done" ? `/api/files/${archiveKey(viewer.id, run.id)}` : null;
   const active = run.status === "queued" || run.status === "running";
 
   return (
@@ -44,8 +57,8 @@ export default async function RunPage({ params }: PageProps<"/[locale]/runs/[id]
           <span>
             {t("started", { date: format.dateTime(run.createdAt, { dateStyle: "medium", timeStyle: "short" }) })}
           </span>
-          {run.archiveUrl ? (
-            <a href={run.archiveUrl} className="text-primary underline" download>
+          {archiveHref ? (
+            <a href={archiveHref} className="text-primary underline" download>
               {t("downloadArchive")}
             </a>
           ) : null}

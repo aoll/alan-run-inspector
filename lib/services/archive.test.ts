@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getOwnedRunArchive } from "@/lib/dal/run-archive";
 import { createRun } from "@/lib/dal/runs";
-import { UnauthorizedError } from "@/lib/errors";
+import { NotFoundError, UnauthorizedError } from "@/lib/errors";
 import { createUser, signInAs } from "@/test/session";
 
 const files = new Map<string, string>();
@@ -15,7 +15,8 @@ vi.mock("@/lib/queue", () => ({ enqueue: vi.fn() }));
 
 const { processRun } = await import("./runs");
 const { decideStep } = await import("./review");
-const { refreshArchive, archiveKey } = await import("./archive");
+const { refreshArchive, archiveKey, buildOwnedArchiveFile } = await import("./archive");
+const { readOwnedFile } = await import("./files");
 
 const noSleep = async () => undefined;
 
@@ -61,5 +62,41 @@ describe("run archive (real database)", () => {
     await expect(refreshArchive(run.id)).resolves.toBeUndefined();
     signInAs(null);
     await expect(getOwnedRunArchive(run.id)).rejects.toBeInstanceOf(UnauthorizedError);
+  });
+
+  it("is rebuilt from the database for the owner when the stored file is missing", async () => {
+    const { user, run, key } = await finishedRun();
+    files.clear();
+    const text = (await readOwnedFile(key)).toString();
+    const archive = JSON.parse(text);
+    expect(archive.run).toMatchObject({ id: run.id, status: "done", verdict: "none" });
+    expect(archive.steps).toHaveLength(8);
+    expect(text).not.toContain("secret-ip-hash");
+    expect(text).not.toContain(user.id);
+  });
+
+  it("is never outdated: a decision whose rewrite failed is still in the download, note included", async () => {
+    const { run, key } = await finishedRun();
+    const stale = files.get(key);
+    files.clear(); // the rewrite after the decision is lost
+    await decideStep({ runId: run.id, position: 2, decision: "rejected", note: "No evidence for this claim" });
+    const archive = JSON.parse((await readOwnedFile(key)).toString());
+    expect(archive.run.verdict).toBe("needs_changes");
+    expect(archive.steps[1]).toMatchObject({ decision: "rejected", note: "No evidence for this claim" });
+    expect(JSON.parse(stale!).run.verdict).toBe("none");
+  });
+
+  it("answers not found to another user, an anonymous visitor, an unknown run and a run not done", async () => {
+    const { user, run, key } = await finishedRun();
+    const pending = await createRun({ title: "T", scenario: "fix-invoice-test", ipHash: "h" });
+    await expect(buildOwnedArchiveFile(pending.id)).rejects.toBeInstanceOf(NotFoundError);
+    await expect(readOwnedFile(archiveKey(user.id, "not-a-uuid"))).rejects.toBeInstanceOf(NotFoundError);
+    const unknown = "00000000-0000-4000-8000-000000000000";
+    await expect(readOwnedFile(archiveKey(user.id, unknown))).rejects.toBeInstanceOf(NotFoundError);
+    signInAs(await createUser());
+    await expect(readOwnedFile(key)).rejects.toBeInstanceOf(NotFoundError);
+    await expect(buildOwnedArchiveFile(run.id)).rejects.toBeInstanceOf(NotFoundError);
+    signInAs(null);
+    await expect(readOwnedFile(key)).rejects.toBeInstanceOf(NotFoundError);
   });
 });

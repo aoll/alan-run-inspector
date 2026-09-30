@@ -13,11 +13,13 @@ import type { DemoCredentials } from "@/lib/auth-demo";
 import { signInSchema, signUpSchema } from "@/lib/schemas/auth";
 import { requestMagicLinkAction, type MagicLinkState } from "./_actions";
 
+// Better Auth's code for a sign-up with an email that already has an account.
+const EMAIL_TAKEN = "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL";
 const IDLE: MagicLinkState = { status: "idle" };
 
 function useCredentialsForm(mode: "signIn" | "signUp") {
   const router = useRouter();
-  const [error, setError] = useState<"invalid" | "failed" | null>(null);
+  const [error, setError] = useState<"invalid" | "failed" | "emailTaken" | null>(null);
   const [pending, setPending] = useState(false);
 
   async function submit(formData: FormData) {
@@ -31,7 +33,7 @@ function useCredentialsForm(mode: "signIn" | "signUp") {
         ? await authClient.signIn.email({ email: parsed.data.email, password: parsed.data.password })
         : await authClient.signUp.email(signUpSchema.parse(values));
     setPending(false);
-    if (result.error) return setError("failed");
+    if (result.error) return setError(result.error.code === EMAIL_TAKEN ? "emailTaken" : "failed");
     router.push(APP_HOME);
     router.refresh();
   }
@@ -116,17 +118,36 @@ export function SignInForm({ defaults }: { defaults: DemoCredentials | null }) {
 
 export function SignUpForm() {
   const t = useTranslations("auth");
+  // Kept in state for the same reason as the sign-in email: a refused sign-up must not empty the fields (the
+  // password is deliberately left to be retyped).
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const { submit, error, pending } = useCredentialsForm("signUp");
   return (
     <div className="space-y-6">
       <form action={submit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="name">{t("fields.name")}</Label>
-          <Input id="name" name="name" autoComplete="name" required />
+          <Input
+            id="name"
+            name="name"
+            autoComplete="name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            required
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">{t("fields.email")}</Label>
-          <Input id="email" name="email" type="email" autoComplete="email" required />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">{t("fields.password")}</Label>
