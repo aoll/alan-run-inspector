@@ -4,8 +4,8 @@
   "features": {
     "F01-demo-access": {
       "dependsOn": [],
-      "status": "dispatched",
-      "worktree": "f01-demo-access"
+      "status": "merged",
+      "worktree": null
     },
     "F02-runs-and-execution": {
       "dependsOn": [],
