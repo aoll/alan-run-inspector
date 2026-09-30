@@ -5,3 +5,4 @@ drizzle/
 messages/
 pnpm-lock.yaml
 .claude/runs/
+.claude/qa/reports/
