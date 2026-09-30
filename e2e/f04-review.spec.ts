@@ -46,6 +46,17 @@ test("rejecting the unverified step gives Needs changes, and it survives a reloa
   }
   await expect(page.getByTestId("verdict")).toHaveText("Needs changes");
 
+  // The archive is the owner's private copy of the reviewed run.
+  const href = await page.getByRole("link", { name: "Download archive" }).getAttribute("href");
+  const download = await page.request.get(href!);
+  expect(download.headers()["content-type"]).toContain("application/json");
+  const archive = await download.json();
+  expect(archive.run.status).toBe("done");
+  expect(archive.run.verdict).toBe("needs_changes");
+  expect(archive.steps.map((step: { note: string | null }) => step.note).filter(Boolean)).toEqual([
+    "No evidence for this claim",
+  ]);
+
   await page.reload();
   await expect(page.getByTestId("verdict")).toHaveText("Needs changes");
   const unverifiedStep = page.locator('[data-testid="step"][data-unverified="true"]');

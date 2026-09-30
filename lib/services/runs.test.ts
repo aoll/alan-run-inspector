@@ -9,6 +9,7 @@ const startRunJob = vi.fn();
 const writeRunStep = vi.fn();
 const getRunArchive = vi.fn();
 const completeRunJob = vi.fn();
+const setRunArchiveUrl = vi.fn();
 const failRunJob = vi.fn();
 const putFile = vi.fn();
 vi.mock("@/lib/dal/runs", () => ({
@@ -21,6 +22,7 @@ vi.mock("@/lib/dal/run-jobs", () => ({
   writeRunStep: (...args: unknown[]) => writeRunStep(...args),
   getRunArchive: (...args: unknown[]) => getRunArchive(...args),
   completeRunJob: (...args: unknown[]) => completeRunJob(...args),
+  setRunArchiveUrl: (...args: unknown[]) => setRunArchiveUrl(...args),
   failRunJob: (...args: unknown[]) => failRunJob(...args),
 }));
 vi.mock("@/lib/queue", () => ({ enqueue: (...args: unknown[]) => enqueue(...args) }));
@@ -74,6 +76,7 @@ describe("processRun", () => {
     vi.clearAllMocks();
     startRunJob.mockResolvedValue({ id: "run-1", userId: "user-1", scenario: "rename-config-option" });
     getRunArchive.mockResolvedValue({ run: { id: "run-1" }, steps: [] });
+    setRunArchiveUrl.mockResolvedValue(undefined);
     putFile.mockResolvedValue({ url: "/api/files/x.json" });
   });
 
@@ -82,7 +85,10 @@ describe("processRun", () => {
     const positions = writeRunStep.mock.calls.map((call) => (call[1] as { position: number }).position);
     expect(positions).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
     expect(putFile).toHaveBeenCalledWith(expect.objectContaining({ key: "runs/user-1/run-1.json" }));
-    expect(completeRunJob).toHaveBeenCalledWith("run-1", "/api/files/x.json");
+    expect(completeRunJob).toHaveBeenCalledWith("run-1");
+    expect(setRunArchiveUrl).toHaveBeenCalledWith("run-1", "/api/files/x.json");
+    // The run is done before the archive is read, so the archive describes the finished run.
+    expect(completeRunJob.mock.invocationCallOrder[0]).toBeLessThan(getRunArchive.mock.invocationCallOrder[0]!);
   });
 
   it("does nothing for a run that is already done (redelivered message)", async () => {

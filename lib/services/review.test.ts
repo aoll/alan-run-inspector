@@ -6,6 +6,8 @@ const listSteps = vi.fn();
 const saveDecision = vi.fn();
 const setVerdict = vi.fn();
 const getStepNote = vi.fn();
+const refreshArchive = vi.fn();
+vi.mock("@/lib/services/archive", () => ({ refreshArchive: (...a: unknown[]) => refreshArchive(...a) }));
 vi.mock("@/lib/dal/runs", () => ({ getRun: (...a: unknown[]) => getRun(...a) }));
 vi.mock("@/lib/dal/run-steps", () => ({ listSteps: (...a: unknown[]) => listSteps(...a) }));
 vi.mock("@/lib/dal/run-decisions", () => ({
@@ -37,6 +39,7 @@ describe("computeVerdict", () => {
 describe("decideStep", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    refreshArchive.mockResolvedValue(undefined);
     getRun.mockResolvedValue({ id: RUN_ID, status: "done" });
     saveDecision.mockResolvedValue(true);
   });
@@ -66,6 +69,18 @@ describe("decideStep", () => {
       expect(setVerdict).not.toHaveBeenCalled();
     });
   }
+
+  it("rewrites the archive after each decision, and a failed rewrite does not fail the decision", async () => {
+    saveDecision.mockResolvedValue(true);
+    listSteps.mockResolvedValue(steps("rejected"));
+    refreshArchive.mockResolvedValue(undefined);
+    await decideStep({ runId: RUN_ID, position: 1, decision: "rejected", note: "n" });
+    expect(refreshArchive).toHaveBeenCalledWith(RUN_ID);
+    expect(refreshArchive.mock.invocationCallOrder[0]).toBeGreaterThan(setVerdict.mock.invocationCallOrder[0]!);
+    refreshArchive.mockRejectedValue(new Error("disk"));
+    vi.spyOn(console, "error").mockImplementation(() => undefined);
+    await expect(decideStep({ runId: RUN_ID, position: 1, decision: "rejected" })).resolves.toBe("needs_changes");
+  });
 
   it("answers not found for another user's or unknown run, writing nothing", async () => {
     getRun.mockResolvedValue(null);
