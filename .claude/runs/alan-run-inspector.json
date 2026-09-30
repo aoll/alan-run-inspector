@@ -16,22 +16,22 @@
       "dependsOn": [
         "F02-runs-and-execution"
       ],
-      "status": "dispatched",
-      "worktree": "f03-timeline-and-evidence"
+      "status": "merged",
+      "worktree": null
     },
     "F04-review-and-verdict": {
       "dependsOn": [
         "F03-timeline-and-evidence"
       ],
-      "status": "pending",
-      "worktree": null
+      "status": "dispatched",
+      "worktree": "f04-review-and-verdict"
     },
     "F05-explain-step": {
       "dependsOn": [
         "F03-timeline-and-evidence"
       ],
-      "status": "pending",
-      "worktree": null
+      "status": "dispatched",
+      "worktree": "f05-explain-step"
     }
   }
 }
