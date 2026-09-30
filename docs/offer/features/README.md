@@ -4,7 +4,7 @@ Waves group the features that can be built at the same time: features of a wave 
 
 | Feature                   | Depends on | Estimate | Wave | Status |
 | ------------------------- | ---------- | -------- | ---- | ------ |
-| F01-demo-access           | —          | 8 min    | 1    | to do  |
+| F01-demo-access           | —          | 8 min    | 1    | done   |
 | F02-runs-and-execution    | —          | 20 min   | 1    | to do  |
 | F03-timeline-and-evidence | F02        | 15 min   | 2    | to do  |
 | F04-review-and-verdict    | F03        | 15 min   | 3    | to do  |
