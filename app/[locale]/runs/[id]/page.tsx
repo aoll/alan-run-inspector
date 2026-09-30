@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -6,9 +7,15 @@ import { NotFoundError } from "@/lib/errors";
 import { runIdSchema } from "@/lib/schemas/runs";
 import { getRunTimeline } from "@/lib/services/timeline";
 import { getCurrentViewer } from "@/lib/services/session";
+import { runTitle } from "../run-title";
 import { AutoRefresh } from "./_components/auto-refresh";
 import { Timeline } from "./_components/timeline";
 import { VerdictBadge } from "./_components/verdict-badge";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("timeline");
+  return { title: t("pageTitle") };
+}
 
 export default async function RunPage({ params }: PageProps<"/[locale]/runs/[id]">) {
   const { id } = await params;
@@ -30,7 +37,7 @@ export default async function RunPage({ params }: PageProps<"/[locale]/runs/[id]
         {t("back")}
       </Link>
       <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">{run.title}</h1>
+        <h1 className="text-2xl font-semibold">{runTitle(tRuns, run)}</h1>
         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
           <Badge variant={run.status === "failed" ? "destructive" : "secondary"}>{tRuns(`status.${run.status}`)}</Badge>
           <VerdictBadge verdict={run.verdict} />
@@ -45,7 +52,7 @@ export default async function RunPage({ params }: PageProps<"/[locale]/runs/[id]
         </div>
         <p className="text-sm text-muted-foreground">{t("notice")}</p>
       </header>
-      <Timeline runId={run.id} steps={steps} />
+      <Timeline runId={run.id} steps={steps} status={run.status} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 {
-  "appName": "Demo Template",
+  "appName": "Run Inspector",
   "nav": {
     "home": "Accueil",
     "signIn": "Connexion",
@@ -29,6 +29,8 @@
     "unauthorized": "Connectez-vous d'abord.",
     "rateLimited": "Trop de requêtes. Réessayez dans une minute.",
     "bot": "Requête bloquée par la protection anti-bots.",
-    "notFound": "Introuvable."
+    "notFound": "Introuvable.",
+    "notFoundTitle": "Page introuvable",
+    "notFoundBack": "Retour aux exécutions"
   }
 }

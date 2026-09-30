@@ -12,6 +12,9 @@ pnpm db:migrate && pnpm db:seed   # seed: demo@example.com / demo-password-123
 pnpm dev
 ```
 
+`DEMO_PREFILL=true` pre-fills the sign-in form with the seeded demo account: it is on in `.env.example`, and **the deployed
+demo must define it too** (Vercel environment variables), otherwise the fields are empty.
+
 `AI_MODE=mock` streams recorded answers and `INFRA_MODE=local` stores files under `.data/` and runs the queue
 in-process, so nothing external is needed. Set `AI_MODE=live` / `INFRA_MODE=vercel` for the real services.
 

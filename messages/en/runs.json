@@ -23,5 +23,6 @@
     "invalid": "Choose a scenario from the list.",
     "rateLimited": "Too many runs started. Try again in a minute.",
     "failed": "The run could not be started."
-  }
+  },
+  "pageTitle": "Runs"
 }

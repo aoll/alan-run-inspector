@@ -16,5 +16,10 @@
   "input": "Input",
   "output": "Output",
   "evidence": "Evidence",
-  "noEvidence": "No evidence provided."
+  "noEvidence": "No evidence provided.",
+  "pageTitle": "Run details",
+  "failed": {
+    "title": "This run failed",
+    "description": "The agent stopped before finishing, so the steps above may be incomplete. You can start a new run from the list of runs."
+  }
 }

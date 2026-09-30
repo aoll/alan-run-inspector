@@ -1,6 +1,5 @@
 {
-  "title": "Your demo starts here",
-  "subtitle": "Auth, database, AI, files, queues, security and i18n are wired. Add the business pages.",
-  "cta": "Open the app",
-  "ctaSignUp": "Create an account"
+  "title": "Check what an AI agent really did",
+  "subtitle": "Run Inspector replays an agent's steps, flags every claim that has no evidence, and lets you approve or reject each step. All data is fictional.",
+  "cta": "Open the tool"
 }
