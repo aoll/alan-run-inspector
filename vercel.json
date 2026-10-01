@@ -3,7 +3,13 @@
   "framework": "nextjs",
   "functions": {
     "app/api/queues/runs/route.ts": {
-      "experimentalTriggers": [{ "type": "queue/v2beta", "topic": "runs" }]
+      "experimentalTriggers": [
+        {
+          "type": "queue/v2beta",
+          "topic": "runs"
+        }
+      ]
     }
-  }
+  },
+  "buildCommand": "pnpm db:migrate && pnpm db:seed && pnpm build"
 }
