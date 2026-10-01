@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,8 +24,9 @@ export async function StepCard({ runId, step }: { runId: string; step: TimelineS
         </CardHeader>
         <CardContent className="space-y-2">
           {sections.map(({ key, body }) => (
-            <Collapsible key={key}>
-              <CollapsibleTrigger className="text-sm font-medium underline-offset-4 hover:underline">
+            <Collapsible key={key} defaultOpen>
+              <CollapsibleTrigger className="group flex items-center gap-1 text-sm font-medium hover:underline">
+                <ChevronDownIcon className="size-4 transition-transform group-data-[state=closed]:-rotate-90" />
                 {t(key)}
               </CollapsibleTrigger>
               <CollapsibleContent>

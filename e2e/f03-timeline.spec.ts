@@ -43,10 +43,13 @@ test("the timeline fills in by itself and flags exactly one unverified step", as
   expect(archive.ok()).toBe(true);
   expect((await archive.json()).steps).toHaveLength(8);
 
-  // A step's input, output and evidence are collapsible.
+  // A step's input, output and evidence are open by default and collapsible.
   const first = page.getByTestId("step").first();
+  const firstContent = first.locator("[data-slot=collapsible-content]").first();
+  await expect(firstContent).toBeVisible();
+  await expect(firstContent).not.toBeEmpty();
   await first.getByRole("button", { name: "Input" }).click();
-  await expect(first.locator("[data-slot=collapsible-content]").first()).toBeVisible();
+  await expect(firstContent).toBeHidden();
 
   // An unknown id answers "not found" too.
   const runUrl = page.url();
